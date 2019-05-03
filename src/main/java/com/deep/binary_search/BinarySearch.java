@@ -34,8 +34,9 @@ public class BinarySearch {
 		int first = binarySearch.findCountOccurenceOfNumber(10, true);
 		int last = binarySearch.findCountOccurenceOfNumber(10, false);
 		System.out.println(" Occurrence of Number " + (last - first + 1));
-		// binarySearch.findRotationCount();
-		binarySearch.findElementInCircularSortedArray();
+//		 binarySearch.findRotationCount();
+//		binarySearch.findElementInCircularSortedArray();
+		binarySearch.findRotationCountUsingBinarySearch();
 	}
 
 	private int binarySearch(int num) {
@@ -120,6 +121,33 @@ public class BinarySearch {
 			}
 		}
 		System.out.println(" Rotation Count :: " + minIndex);
+	}
+	
+	private void findRotationCountUsingBinarySearch() {
+		int rot[] = { 11, 12, 15, 18, 2, 5, 6, 8 };
+		int low=0,high=rot.length-1,mid=0,next,prev;
+		int rotCount=-1,n=rot.length;
+		while(low<=high) {
+			if(rot[low]<=rot[high]) // Case 1 when array is sorted
+			{
+				rotCount = low;
+				break;
+			}
+			mid=(low+high)/2;
+			next = (mid+1)%n;
+			prev = (mid-1+n)%n;
+			if (rot[mid]<= rot[next] && rot[mid]<=rot[prev]) {
+				rotCount=mid;		// Case 2 find pivot element
+				break;
+			}
+			else if (rot[mid]<=rot[high]) {
+				high=mid-1;
+			}
+			else if (rot[low] <= rot[mid]) {
+				low=mid+1;
+			}
+		}
+		System.out.println(" rotation index " + rotCount);
 	}
 
 	/**

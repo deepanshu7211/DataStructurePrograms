@@ -16,6 +16,12 @@ public class BSTRecursive {
 		root = bstRecursiveOperation.insert(root, 25);
 		
 		bstRecursiveOperation.traverse(root);
+		boolean result = bstRecursiveOperation.search(root, 12);
+		System.out.println("result :: " + result);
+		boolean isBST = bstRecursiveOperation.isBstOrNot(root);
+		System.out.println( " is BST or not " + isBST);
+		TreeNode successornode = bstRecursiveOperation.getSuccessor(root,8);
+		System.out.println(" successor data " + successornode.getData());
 	}
 }
 
@@ -57,4 +63,81 @@ class BSTRecursiveOperation{
 		}
 	}
 	
+	public boolean search(TreeNode root, int data) {
+		if(root==null) return false;
+		else if (root.getData()== data) {
+			return true;
+		}
+		else if (data<=root.getData()) {
+			return search(root.getLeft(), data);
+		}
+		else {
+			return search(root.getRight(), data);
+		}
+		
+	}
+	
+	public boolean isBstOrNot(TreeNode root) {
+		return isBstUtil(root,Integer.MIN_VALUE,Integer.MAX_VALUE);
+	}
+
+	private boolean isBstUtil(TreeNode root, int minValue, int maxValue) {
+		// TODO Auto-generated method stub
+		if(root == null) 
+			return true;
+		if(root.getData() > minValue && root.getData()<maxValue &&
+				isBstUtil(root.getLeft(), minValue, root.getData()) &&
+				isBstUtil(root.getRight(), root.getData(), maxValue)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public TreeNode getSuccessor(TreeNode root,int data){
+		if(root==null) return  null;
+		TreeNode currentNode = findNode(root,data);
+
+		// Case 1 Node has right subtree
+		if(currentNode.getRight()!=null){
+			return findMin(root.getRight());
+		}
+		else {
+			// Case 2 Node has no right subtree
+			TreeNode ancestor=root;
+			TreeNode successor =null;
+			while (ancestor!=currentNode){
+				if(currentNode.getData()<ancestor.getData()){
+					// so far this is the deepest node for which current node is left
+					successor=ancestor;
+					ancestor= ancestor.getLeft();
+				}
+				else {
+					ancestor= ancestor.getRight();
+				}
+			}
+			return successor;
+		}
+
+	}
+
+	public TreeNode findMin(TreeNode root){
+		while (root.getLeft()!=null){
+			root=root.getLeft();
+		}
+		return root;
+	}
+	public TreeNode findNode(TreeNode root,int data){
+		if(root==null) return null;
+		if(root.getData()== data){
+			return root;
+		}
+		else if(data < root.getData()){
+			return findNode(root.getLeft(),data);
+		}
+		else {
+			return findNode(root.getRight(),data);
+		}
+	}
 }
